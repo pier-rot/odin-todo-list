@@ -22,7 +22,7 @@ export default class Todo {
                 }
             }
             else if (this[key] != other[key]) {
-                console.log(`${this[key]} !== ${other[key]}`);
+                console.log(`${key} : ${this[key]} !== ${other[key]}`);
                 return false;
             }
         }
