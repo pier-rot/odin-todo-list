@@ -14,7 +14,7 @@ export default class TodoList {
 	remove(todo) {
 		if (this.isEmpty) {
 			this.todos = [];
-			console.log(
+			throw new Error(
 				"You cannot remove from the todo list since it's empty."
 			);
 		}
@@ -30,7 +30,7 @@ export default class TodoList {
             this.todos.push(todo);
             this.updateEmpty();
         } else {
-            console.log(`${todo} is not a Todo object.`);
+            throw new Error(`${todo} is not a Todo object.`);
         }
 	}
 
