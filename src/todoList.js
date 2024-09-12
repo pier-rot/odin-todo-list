@@ -1,3 +1,5 @@
+import isArrayOf from "./util/isArrayOf";
+import Todo from "./todo";
 export default class TodoList {
     constructor(todos){
         this.todos = todos;
