@@ -6,7 +6,7 @@ export default class TodoList {
 			this.todos = todos;
 			this.isEmpty = todos.length == 0 ? true : false;
 		} else {
-            console.log(`${todos} must be an array of Todo objects.`)
+            throw new Error("Invalid todo list"); 
         }
 	}
 
