@@ -6,13 +6,13 @@ export default class Todo {
 		if (isValidString(name)) {
 			this.name = name;
 		} else {
-			console.log(`${name} is not a valid name.`);
+			throw new Error(`${name} is not a valid name.`);
 		}
         // Check if desc is a valid description
 		if (isValidString(desc)) {
 			this.desc = desc;
 		} else {
-			console.log(`${desc} is not a valid description.`);
+			throw new Error(`${desc} is not a valid description.`);
 		}
         // Check if dueDate is a valid date.
 		this.dueDate = dueDate;
@@ -21,19 +21,19 @@ export default class Todo {
 		if (reqs instanceof Array) {
 			this.reqs = reqs;
 		} else {
-			console.log(`${reqs} must be an array.`);
+			throw new Error(`${reqs} must be an array.`);
 		}
         // Check if priority is a valid number between 1 and 5.
 		if (typeof priority !== "number") {
-			console.log(`${priority} must be a number.`);
+			throw new Error(`${priority} must be a number.`);
 		} else if (priority > 5 || priority < 1) {
-			console.log(`${priority} must be between 1 and 5.`);
+			throw new Error(`${priority} must be between 1 and 5.`);
 		} else {
 			this.priority = priority;
 		}
         // Check if isDone is a boolean.
         if (typeof isDone !== "boolean") {
-            console.log(`${isDone} must be a boolean.`)
+            throw new Error(`${isDone} must be a boolean.`)
         } else {
 		    this.isDone = isDone;
         }
