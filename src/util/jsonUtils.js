@@ -1,5 +1,7 @@
 import isArrayOf from "./isArrayOf";
 import Project from "../project";
+import Todo from "../todo";
+import TodoList from "../todoList";
 function storageAvailable(type) {
   // type = "localStorage" || "sessionStorage"
 	let storage;
@@ -18,6 +20,38 @@ function storageAvailable(type) {
 			storage.length !== 0
 		);
 	}
+}
+
+// Returns a Project object which was parsed from a JS Object parsed from JSON
+function getProjectFromObj(obj) {
+  return new Project(obj.name, getTodoListFromObj(obj.todoList), new Date(obj.dueDate));
+
+}
+
+// Returns a TodoList object which was parsed from a JS Object parsed from JSON
+function getTodoListFromObj(obj) {
+  const todos = [];
+  const nrOfTodos = obj.todos.length;
+
+  for(let i = 0; i<nrOfTodos; i++) {
+    todos.push(getTodoFromObj(obj.todos[i]));
+  }
+  return new TodoList(todos);
+}
+
+// Returns a Todo object which was parsed from a JS Object parsed from JSON
+function getTodoFromObj(obj) {
+  return new Todo(obj.name, obj.desc, new Date(obj.dueDate), obj.reqs, obj.priority, obj.isDone);
+}
+
+// Returns an array of Project objects made from str which is a string that stores projects data in JSON format
+function getProjectsFromJSON(str) {
+  const projectObjArray = JSON.parse(str);
+  const projects = [];
+  for(let i = 0; i<projectObjArray.length;i++){
+    projects.push(getProjectFromObj(projectObjArray[i]));
+  }
+  return projects;
 }
 
 // Reads from localStorage and returns an array of Project objects
