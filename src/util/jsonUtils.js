@@ -22,6 +22,8 @@ function storageAvailable(type) {
 
 // Reads from localStorage and returns an array of Project objects
 function readProjects(storage) {
+  if (!storageAvailable(storage)) {throw new Error(`${storage} is not an available storage.`);};
+  return (window[storage].getItem("projects") === null) ? [] : getProjectsFromJSON(window[storage].getItem("projects"));
 };
 
 // Writes projects to storage
