@@ -1,3 +1,5 @@
+import isArrayOf from "./isArrayOf";
+import Project from "../project";
 function storageAvailable(type) {
   // type = "localStorage" || "sessionStorage"
 	let storage;
@@ -18,10 +20,23 @@ function storageAvailable(type) {
 	}
 }
 
-function fromJSONtoProjects(JSONString) {
-  // Reads from JSONString and return an array of Project objects
+// Reads from localStorage and returns an array of Project objects
+function readProjects(storage) {
 };
 
-function fromProjectsToJSON(projects) {
-  // Write projects array to JSON
+// Writes projects to storage
+function saveProjects(projects, storage) {
+
+  // Check if storage is available
+  if (!storageAvailable(storage)) {
+    throw new Error(`${storage} is not an available storage.`)
+  }
+  // Check if projects is an array an array of Project objects
+  if (!(isArrayOf(projects, Project))) {
+    throw new Error(`${projects} is not an array.`);
+  }
+  // Sets the "projects" item to the JSON String of projects
+  window[storage].setItem("projects", JSON.stringify(projects));
 };
+
+export {readProjects, saveProjects};
