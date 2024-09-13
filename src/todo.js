@@ -15,7 +15,11 @@ export default class Todo {
 			throw new Error(`${desc} is not a valid description.`);
 		}
         // Check if dueDate is a valid date.
-		this.dueDate = dueDate;
+		if (dueDate instanceof Date) {
+			this.dueDate = dueDate;
+		} else {
+			throw new Error("the given date must be a Date object.")
+		}
   
         // Check if reqs is an array.
 		if (reqs instanceof Array) {
