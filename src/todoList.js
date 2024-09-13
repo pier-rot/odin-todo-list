@@ -37,4 +37,9 @@ export default class TodoList {
 	updateEmpty() {
 		this.isEmpty = this.todos.length == 0 ? true : false;
 	}
+	
+	removeAll(){
+		this.todos = [];
+		this.updateEmpty();
+	}
 }
