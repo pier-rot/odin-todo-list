@@ -17,7 +17,7 @@ export default class Project {
             throw new Error("todoList must be a TodoList object.");
         }
 
-        if (true) {
+        if (dueDate instanceof Date) {
             this.dueDate = dueDate;
         } else {
             throw new Error("dueDate must be a Date object.");
