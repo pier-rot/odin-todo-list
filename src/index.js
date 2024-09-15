@@ -12,7 +12,7 @@ const project2 = new Project("project 2", tl, new Date());
 
 let projectList = [project, project2];
 // saveProjects(projectList,"localStorage");
-console.log(readProjects("localStorage"));
+// console.log(readProjects("localStorage"));
 
 // function to make HTML from a todo
 function makeHtmlTodo(todo) {
@@ -91,35 +91,46 @@ function makeHtmlTodoList(todoList) {
     return todoListDiv;
 }
 
-const todoContainer = document.querySelector("#todo-container");
-todoContainer.appendChild(makeHtmlTodoList(tl));
 // function to make HTML project tab from project
 function makeHtmlProjectTab(project) {
     const projectTabDiv = document.createElement("div");
     projectTabDiv.setAttribute("class", "project-tab");
-
+    
     const delProjBtn = document.createElement("button");
     delProjBtn.setAttribute("class", "project-delete-btn");
     delProjBtn.setAttribute("type", "button");
     delProjBtn.innerText = "";
     projectTabDiv.appendChild(delProjBtn);
-
+    
     const projNameP = document.createElement("h1");
     projNameP.setAttribute("class", "project-name");
     projNameP.innerText = project.name;
     projectTabDiv.appendChild(projNameP);
-
+    
     const projDateP = document.createElement("p");
     projDateP.innerText = dateToStr(project.dueDate);
     projDateP.setAttribute("class", "project-date");
     projectTabDiv.appendChild(projDateP);
-
+    
     return projectTabDiv;
 }
 
-const projectsContainer = document.querySelector("#projects-container");
-projectsContainer.appendChild(makeHtmlProjectTab(project));
-projectsContainer.appendChild(makeHtmlProjectTab(project2));
+
+// load page content from local storage
+// user modifies the local storage
+// the javascript reloads the page content on each delete/edit/done action
+
+function initContent() {
+    const todoContainer = document.querySelector("#todo-container");
+    const projectsContainer = document.querySelector("#projects-container");
+    const projects = readProjects("localStorage");
+    for(let i = 0; i < projects.length;i++) {
+        const project = projects[i];
+        projectsContainer.appendChild(makeHtmlProjectTab(project));
+
+    }
+}
+initContent();
 // event handler to delete a todo
 function handleDeleteTodo(event) {
 
