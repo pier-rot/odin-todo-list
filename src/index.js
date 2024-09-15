@@ -7,9 +7,9 @@ import dateToStr from "./util/dateToStr";
 import { readProjects, saveProjects } from "./util/jsonUtils";
 
 const todo1 = new Todo("todo1", "my desc", new Date(), ["req 1", "req 2"], 2);
-const todo2 = new Todo("todo2", "my desc", new Date(), [""], 2);
-const todo3 = new Todo("todo3", "my desc", new Date(), [""], 2);
-const todo4 = new Todo("todo3", "my desc", new Date(), [""], 2);
+const todo2 = new Todo("todo2", "my desc", new Date(), [], 2);
+const todo3 = new Todo("todo3", "my desc", new Date(), [], 2);
+const todo4 = new Todo("todo3", "my desc", new Date(), [], 2);
 
 const tl = new TodoList([todo1, todo2, todo3]);
 const tl2 = new TodoList([todo1, todo2, todo3]);
