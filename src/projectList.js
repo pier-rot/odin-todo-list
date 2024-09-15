@@ -1,4 +1,3 @@
-import { NoEmitOnErrorsPlugin } from "webpack";
 import Project from "./project";
 import isArrayOf from "./util/isArrayOf";
 
@@ -28,7 +27,7 @@ export default class ProjectList {
     // Add project to the list
     add(project) {
         if (!(project instanceof Project)){
-            throw new Error("Only project objects can be added.")
+            throw new Error("Only project objects can be added.");
         } else {
             this.projects.push(project);
         }
