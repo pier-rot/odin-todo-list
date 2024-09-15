@@ -144,7 +144,7 @@ function makeTodo(todo, todoList) {
     todoInfo.appendChild(todoDesc);
 
     const todoDate = document.createElement("p");
-    todoDate.inner = dateToStr(todo.dueDate);
+    todoDate.innerText = "Due : " + dateToStr(todo.dueDate);
     todoDate.setAttribute("class", "todo-date");
     todoInfo.appendChild(todoDate);
     
@@ -169,7 +169,7 @@ function makeTodo(todo, todoList) {
         reqsDiv.appendChild(reqCheck);
         reqsDiv.appendChild(reqLabel);
     };
-    todoInfo.appendChild(reqsDiv);
+    // todoInfo.appendChild(reqsDiv);
 
 
     return todoTile;
