@@ -94,7 +94,32 @@ function makeHtmlTodoList(todoList) {
 const todoContainer = document.querySelector("#todo-container");
 todoContainer.appendChild(makeHtmlTodoList(tl));
 // function to make HTML project tab from project
+function makeHtmlProjectTab(project) {
+    const projectTabDiv = document.createElement("div");
+    projectTabDiv.setAttribute("class", "project-tab");
 
+    const delProjBtn = document.createElement("button");
+    delProjBtn.setAttribute("class", "project-delete-btn");
+    delProjBtn.setAttribute("type", "button");
+    delProjBtn.innerText = "";
+    projectTabDiv.appendChild(delProjBtn);
+
+    const projNameP = document.createElement("h1");
+    projNameP.setAttribute("class", "project-name");
+    projNameP.innerText = project.name;
+    projectTabDiv.appendChild(projNameP);
+
+    const projDateP = document.createElement("p");
+    projDateP.innerText = dateToStr(project.dueDate);
+    projDateP.setAttribute("class", "project-date");
+    projectTabDiv.appendChild(projDateP);
+
+    return projectTabDiv;
+}
+
+const projectsContainer = document.querySelector("#projects-container");
+projectsContainer.appendChild(makeHtmlProjectTab(project));
+projectsContainer.appendChild(makeHtmlProjectTab(project2));
 // event handler to delete a todo
 function handleDeleteTodo(event) {
 
