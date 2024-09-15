@@ -105,5 +105,5 @@ function handleDoneTodo(event) {
 }
 
 function dateToStr(dueDate) {
-
+    return `${dueDate.toDateString()} at ${dueDate.toTimeString().split(" ")[0]}`;
 }
