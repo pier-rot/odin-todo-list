@@ -7,8 +7,9 @@ const todo1 = new Todo("todo1", "my desc", new Date(), ["req 1", "req 2"], 2);
 const todo2 = new Todo("todo2", "my desc", new Date(), [""], 2);
 const todo3 = new Todo("todo3", "my desc", new Date(), [""], 2);
 const tl = new TodoList([todo1, todo2, todo3]);
+const tl2 = new TodoList([todo3]);
 const project = new Project("my project", tl, new Date());
-const project2 = new Project("project 2", tl, new Date());
+const project2 = new Project("project 2", tl2, new Date());
 
 let projectList = [project, project2];
 // saveProjects(projectList,"localStorage");
@@ -119,18 +120,20 @@ function makeHtmlProjectTab(project) {
 // load page content from local storage
 // user modifies the local storage
 // the javascript reloads the page content on each delete/edit/done action
-
-function initContent() {
-    const todoContainer = document.querySelector("#todo-container");
+function loadProjectTabs() {
     const projectsContainer = document.querySelector("#projects-container");
     const projects = readProjects("localStorage");
     for(let i = 0; i < projects.length;i++) {
         const project = projects[i];
-        projectsContainer.appendChild(makeHtmlProjectTab(project));
+        const projectTab = makeHtmlProjectTab(project);
+        projectTab.addEventListener("click", (e) => {
+            fillTodoContainer(makeHtmlTodoList(project.todoList));
+        })
+        projectsContainer.appendChild(projectTab);
 
     }
 }
-initContent();
+loadProjectTabs();
 // function to empty the todo-container
 function emptyTodoContainer() {
     document.querySelector("#todo-container").innerHTML = "";
@@ -141,6 +144,17 @@ function fillTodoContainer(div) {
     emptyTodoContainer();
     document.querySelector("#todo-container").appendChild(div);
 }
+
+
+// const projectTable = [
+//     [tab1,project1],
+//     [tab2, project2], 
+// ]
+
+
+
+
+
 // event handler to delete a todo
 function handleDeleteTodo(event) {
 
