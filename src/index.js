@@ -19,10 +19,14 @@ const project2 = new Project("project2",tl2, date1);
 const project3 = new Project("project3", t2, date1);
 
 const defaultProjectList = new ProjectList([project1, project2, project3]);
-// saveProjects(defaultProjectList, "localStorage");
+saveProjects(defaultProjectList, "localStorage");
 const projects = readProjects("localStorage");
+let selectedProject;
 
 
+function selectProject(project) {
+    selectedProject = project;
+}
 // Makes a div from a Project object
 function makeProjectTab(project) {
     if (!(project instanceof Project)) {
@@ -31,8 +35,9 @@ function makeProjectTab(project) {
     const projectTab = document.createElement("div");
     projectTab.setAttribute("class", "project-tab");
     projectTab.addEventListener("click", (e) => {
+        displayProject(project);
         selectProject(project);
-    })
+    },true)
 
     // delete button
     const delBtn = document.createElement("button");
@@ -41,7 +46,12 @@ function makeProjectTab(project) {
     delBtn.setAttribute("class", "del-project-btn");
     delBtn.addEventListener("click", (e) => {
         projects.remove(project);
-    });
+        if (selectedProject == project) {
+            document.querySelector("#todo-container").innerHTML = "";
+        }
+        makeProjects();
+        saveProjects(projects, "localStorage");
+    }, true);
     projectTab.appendChild(delBtn);
 
     // project name
@@ -61,6 +71,7 @@ function makeProjectTab(project) {
 // make project tabs from the global projects variable
 function makeProjects() {
     const projectsContainer = document.querySelector("#projects-container");
+    projectsContainer.innerHTML = "";
     for(let i = 0; i < projects.projects.length; i++) {
         projectsContainer.appendChild(makeProjectTab(projects.projects[i]));
     };
@@ -69,7 +80,7 @@ function makeProjects() {
 }
 makeProjects();
 // select project tab
-function selectProject(project) {
+function displayProject(project) {
     const todoContainer = document.querySelector("#todo-container");
     todoContainer.innerHTML = "";
     const projectName = document.createElement("h2");
@@ -112,6 +123,7 @@ function makeTodo(todo, todoList) {
     btnContainer.appendChild(delBtn);
     delBtn.addEventListener("click", (e) => {
         todoList.remove(todo);
+        displayProject(selectedProject);
     });
 
     const editBtn = document.createElement("button");
