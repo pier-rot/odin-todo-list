@@ -1,3 +1,4 @@
+import { NoEmitOnErrorsPlugin } from "webpack";
 import Project from "./project";
 import isArrayOf from "./util/isArrayOf";
 
@@ -11,6 +12,7 @@ export default class ProjectList {
         }
     }
 
+    // remove project from the project list
     remove(project) {
         if (this.isEmpty) {
 			this.projects = [];
@@ -23,7 +25,15 @@ export default class ProjectList {
 		});
 		this.updateEmpty();
     }
-
+    // Add project to the list
+    add(project) {
+        if (!(project instanceof Project)){
+            throw new Error("Only project objects can be added.")
+        } else {
+            this.projects.push(project);
+        }
+    }
+    // update the isEmpty boolean
     updateEmpty() {
         this.isEmpty = this.projects.length == 0 ? true : false;
     }
