@@ -57,7 +57,7 @@ function makeProjectTab(project) {
 
     // project name
     const projectName = document.createElement("h2");
-    projectName.innerText = project.name;
+    projectName.innerText = project.name.toUpperCase();
     projectName.setAttribute("class", "project-name-header");
     projectTab.appendChild(projectName);
 
@@ -85,7 +85,7 @@ function displayProject(project) {
     const todoContainer = document.querySelector("#todo-container");
     todoContainer.innerHTML = "";
     const projectName = document.createElement("h2");
-    projectName.innerText = project.name;
+    projectName.innerText = project.name.toUpperCase();
     todoContainer.appendChild(projectName)
 
     todoContainer.appendChild(makeTodoList(project.todoList));
