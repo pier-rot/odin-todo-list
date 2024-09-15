@@ -197,6 +197,14 @@ function makeAddProjectButton() {
     const addBtn = document.createElement("button");
     addBtn.innerText = "+";
     addBtn.setAttribute("id", "add-project-btn");
+    const projectPop = document.querySelector("#add-project-popup");
+    const closePop = document.querySelector("#close-project-popup");
+    addBtn.addEventListener("click", (e) => {
+        projectPop.classList.toggle("invisible");
+    })
+    closePop.addEventListener("click", (e)=>{
+        projectPop.classList.toggle("invisible");
+    })
     return addBtn;
 
 }
