@@ -12,7 +12,8 @@
 		<main>
 			<div id="todo-container"></div>
 		</main>
-		<div id="add-project-pop" class="popup-container invisible"></div>
+		<div id="add-project-popup" class="popup-container invisible">
+
 			<button type="button" id="close-project-popup">X</button>
 			<div class="popup">
 				<form action="" method="get">
@@ -37,10 +38,11 @@
 				</form>
 			</div>
 		</div>
+		</div>
 		<div id="add-todo-popup" class="popup-container invisible">
 			<button type="button" id="close-todo-popup">X</button>
 			<div class="popup">
-				<form id="todo-form" method="get">
+				<form id="todo-form" method="get" action="">
 					<label for="todo-name">To-do Name :</label>
 					<input type="text" name="todo-name" id="todo-name-input" />
 

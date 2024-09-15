@@ -182,3 +182,9 @@ form {
   padding: 1rem;
   gap: 0.5rem;
 }
+
+#close-todo-popup, #close-project-popup {
+  margin: 1rem;
+  position: fixed;
+  right: 0px;
+}
