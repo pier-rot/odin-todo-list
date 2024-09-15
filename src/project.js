@@ -25,6 +25,7 @@ export default class Project {
 		}
 	}
 
+	// check if this is equal to other
 	isEqual(other) {
 		for (const key in this) {
 			if (this[key] instanceof Array) {
