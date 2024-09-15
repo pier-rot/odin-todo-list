@@ -131,6 +131,16 @@ function initContent() {
     }
 }
 initContent();
+// function to empty the todo-container
+function emptyTodoContainer() {
+    document.querySelector("#todo-container").innerHTML = "";
+}
+
+// function to update the todo-container with clicked tab
+function fillTodoContainer(div) {
+    emptyTodoContainer();
+    document.querySelector("#todo-container").appendChild(div);
+}
 // event handler to delete a todo
 function handleDeleteTodo(event) {
 
