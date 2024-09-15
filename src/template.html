@@ -7,14 +7,69 @@
 	</head>
 	<body>
 		<aside>
-			<div id="projects-container">
-
-            </div>
+			<div id="projects-container"></div>
 		</aside>
 		<main>
-			<div id="todo-container">
-
-            </div>
+			<div id="todo-container"></div>
 		</main>
+		<div class="popup-container invisible">
+			<div id="add-project-pop" class="popup">
+				<form action="" method="get">
+					<label for="project-name">Project Name:</label>
+					<input type="text" name="project-name" id="project-name-indput">
+
+					<label for="project-due-date">Due date :</label>
+					<input
+						type="date"
+						name="project-due-date"
+						id="project-due-date"
+					/>
+
+					<label for="project-due-time">Due time :</label>
+					<input
+						type="time"
+						name="project-due-time"
+						id="project-due-time"
+					/>
+
+					<button type="submit">Add Project</button>
+				</form>
+			</div>
+		</div>
+		<div class="popup-container invisible">
+			<div id="add-todo-popup" class="popup">
+				<form action="" method="get">
+					<label for="todo-name">To-do Name :</label>
+					<input type="text" name="todo-name" id="todo-name-input" />
+
+					<label for="todo-desc">Description :</label>
+					<textarea name="todo-desc" id="todo-desc-input"></textarea>
+
+					<label for="todo-priority">Priority :</label>
+					<input
+						type="number"
+						min="1"
+						max="5"
+						id="todo-priority-input"
+					/>
+
+					<label for="todo-due-date">Due date :</label>
+					<input
+						type="date"
+						name="todo-due-date"
+						id="todo-due-date"
+					/>
+
+					<label for="todo-due-time">Due time :</label>
+					<input
+						type="time"
+						name="todo-due-time"
+						id="todo-due-time"
+					/>
+
+					<button type="submit">Add To-do</button>
+				</form>
+			</div>
+		</div>
 	</body>
 </html>
