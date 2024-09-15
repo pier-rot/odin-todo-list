@@ -2,6 +2,7 @@ import isArrayOf from "./isArrayOf";
 import Project from "../project";
 import Todo from "../todo";
 import TodoList from "../todoList";
+import ProjectList from "../projectList";
 function storageAvailable(type) {
   // type = "localStorage" || "sessionStorage"
 	let storage;
@@ -46,15 +47,15 @@ function getTodoFromObj(obj) {
 
 // Returns an array of Project objects made from str which is a string that stores projects data in JSON format
 function getProjectsFromJSON(str) {
-  const projectObjArray = JSON.parse(str);
-  const projects = [];
-  for(let i = 0; i<projectObjArray.length;i++){
-    projects.push(getProjectFromObj(projectObjArray[i]));
+  const obj = JSON.parse(str);
+  const arr = [];
+  for (let i = 0; i < obj.projects.length;i++) {
+    arr.push(getProjectFromObj(obj.projects[i]));
   }
-  return projects;
+  return new ProjectList(arr);
 }
 
-// Reads from localStorage and returns an array of Project objects
+// Reads from localStorage and returns a ProjectList object
 function readProjects(storage) {
   if (!storageAvailable(storage)) {throw new Error(`${storage} is not an available storage.`);};
   return (window[storage].getItem("projects") === null) ? [] : getProjectsFromJSON(window[storage].getItem("projects"));
@@ -68,8 +69,8 @@ function saveProjects(projects, storage) {
     throw new Error(`${storage} is not an available storage.`)
   }
   // Check if projects is an array an array of Project objects
-  if (!(isArrayOf(projects, Project))) {
-    throw new Error(`${projects} is not an array.`);
+  if (!(projects instanceof ProjectList)) {
+    throw new Error(`${projects} is not a ProjectList object.`);
   }
   // Sets the "projects" item to the JSON String of projects
   window[storage].setItem("projects", JSON.stringify(projects));
