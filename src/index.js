@@ -181,6 +181,14 @@ function makeAddTodoButton() {
     const addBtn = document.createElement("button");
     addBtn.innerText = "+";
     addBtn.setAttribute("id", "add-todo-btn");
+    const todoPopup = document.querySelector("#add-todo-popup");
+    const closePop = document.querySelector("#close-todo-popup");
+    addBtn.addEventListener("click", (e)=> {
+        todoPopup.classList.toggle("invisible");
+    })
+    closePop.addEventListener("click", (e)=>{
+        todoPopup.classList.toggle("invisible");
+    })
     return addBtn;
 }
 
