@@ -1,169 +1,184 @@
 import Todo from "./todo";
 import TodoList from "./todoList";
 import Project from "./project";
+import ProjectList from "./projectList";
+import dateToStr from "./util/dateToStr";
 import { readProjects, saveProjects } from "./util/jsonUtils";
 
 const todo1 = new Todo("todo1", "my desc", new Date(), ["req 1", "req 2"], 2);
 const todo2 = new Todo("todo2", "my desc", new Date(), [""], 2);
 const todo3 = new Todo("todo3", "my desc", new Date(), [""], 2);
+const todo4 = new Todo("todo3", "my desc", new Date(), [""], 2);
+
 const tl = new TodoList([todo1, todo2, todo3]);
-const tl2 = new TodoList([todo3]);
-const project = new Project("my project", tl, new Date());
-const project2 = new Project("project 2", tl2, new Date());
+const tl2 = new TodoList([todo1, todo2, todo3]);
+const t2 = new TodoList([todo3]);
+const date1 = new Date();
+const project1 = new Project("project1",tl, date1);
+const project2 = new Project("project2",tl2, date1);
+const project3 = new Project("project3", t2, date1);
 
-let projectList = [project, project2];
-// saveProjects(projectList,"localStorage");
-// console.log(readProjects("localStorage"));
+const defaultProjectList = new ProjectList([project1, project2, project3]);
+// saveProjects(defaultProjectList, "localStorage");
+const projects = readProjects("localStorage");
 
-// function to make HTML from a todo
-function makeHtmlTodo(todo) {
-    const todoContent = document.createElement("div");
-    todoContent.setAttribute("class", "todo-content");
 
-    const sideBtnDiv = document.createElement("div");
-    sideBtnDiv.setAttribute("class", "todo-side-buttons");
-    todoContent.appendChild(sideBtnDiv);
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.setAttribute("type", "button");
-    deleteBtn.setAttribute("class", "delTodoBtn");
-    deleteBtn.innerText = "";
-    deleteBtn.addEventListener("click",handleDeleteTodo);
-    sideBtnDiv.appendChild(deleteBtn);
-
-    const doneBtn = document.createElement("button");
-    doneBtn.setAttribute("type", "button");
-    doneBtn.setAttribute("class", "doneTodoBtn");
-    doneBtn.innerText = "";
-    doneBtn.addEventListener("click",handleDoneTodo);
-    sideBtnDiv.appendChild(doneBtn);
-
-    const todoDiv = document.createElement("div");
-    todoDiv.setAttribute("class", "todo");
-    todoContent.appendChild(todoDiv);
-    
-    const nameHeader = document.createElement("h2");
-    nameHeader.setAttribute("class", "todo-name");
-    nameHeader.innerText = todo.name;
-    todoDiv.appendChild(nameHeader);
-
-    const descP = document.createElement("p");
-    descP.setAttribute("class","todo-desc");
-    descP.innerText = todo.desc;
-    todoDiv.appendChild(descP);
-
-    const dateP = document.createElement("p");
-    dateP.setAttribute("class", "todo-date");
-    dateP.innerText = dateToStr(todo.dueDate);
-    todoDiv.appendChild(dateP);
-
-    const priorityP = document.createElement("p");
-    priorityP.setAttribute("class","todo-priority");
-    priorityP.innerText = "priority : " + todo.priority;
-    todoDiv.appendChild(priorityP);
-
-    const reqsDiv = document.createElement("div");
-    reqsDiv.setAttribute("class", "todo-requirements");
-    todoDiv.appendChild(reqsDiv);
-    for(let i = 0; i<todo.reqs.length; i++) {
-        const req =  todo.reqs[i];
-        const reqElem = document.createElement("input");
-        reqElem.setAttribute("type", "checkbox");
-        reqElem.setAttribute("class", "requirement");
-        reqElem.setAttribute("name", `req-${i}`);
-        reqsDiv.appendChild(reqElem);
-        const reqLabel = document.createElement("label");
-        reqLabel.innerText = req;
-        reqLabel.setAttribute("for", `req-${i}`);
-        reqsDiv.appendChild(reqLabel);
+// Makes a div from a Project object
+function makeProjectTab(project) {
+    if (!(project instanceof Project)) {
+        throw new Error("Project tabs can only be made from project objects.")
     }
+    const projectTab = document.createElement("div");
+    projectTab.setAttribute("class", "project-tab");
+    projectTab.addEventListener("click", (e) => {
+        selectProject(project);
+    })
 
-    return todoContent;
-};
-// function to make HTML from todo list
-function makeHtmlTodoList(todoList) {
-    const todoListDiv = document.createElement("div");
-    todoListDiv.setAttribute("class", "todo-list");
+    // delete button
+    const delBtn = document.createElement("button");
+    delBtn.innerText = "";
+    delBtn.setAttribute("type", "button");
+    delBtn.setAttribute("class", "del-project-btn");
+    delBtn.addEventListener("click", (e) => {
+        projects.remove(project);
+    });
+    projectTab.appendChild(delBtn);
+
+    // project name
+    const projectName = document.createElement("h2");
+    projectName.innerText = project.name;
+    projectName.setAttribute("class", "project-name-header");
+    projectTab.appendChild(projectName);
+
+    // project due date
+    const date = document.createElement("p");
+    date.innerText = dateToStr(project.dueDate);
+    date.setAttribute("class", "project-due-date");
+    projectTab.appendChild(date);
+
+    return projectTab;
+}
+// make project tabs from the global projects variable
+function makeProjects() {
+    const projectsContainer = document.querySelector("#projects-container");
+    for(let i = 0; i < projects.projects.length; i++) {
+        projectsContainer.appendChild(makeProjectTab(projects.projects[i]));
+    };
+
+    projectsContainer.appendChild(makeAddProjectButton());
+}
+makeProjects();
+// select project tab
+function selectProject(project) {
+    const todoContainer = document.querySelector("#todo-container");
+    todoContainer.innerHTML = "";
+    const projectName = document.createElement("h2");
+    projectName.innerText = project.name;
+    todoContainer.appendChild(projectName)
+
+    todoContainer.appendChild(makeTodoList(project.todoList));
+}
+
+// make div that holds a TodoList
+function makeTodoList(todoList) {
+    const todoListContainer = document.createElement("div");
+    todoListContainer.setAttribute("class", "todo-list-container");
 
     for(let i = 0; i < todoList.todos.length; i++) {
-        todoListDiv.appendChild(makeHtmlTodo(todoList.todos[i]));
+        todoListContainer.appendChild(makeTodo(todoList.todos[i], todoList));
     }
 
-    return todoListDiv;
+    todoListContainer.appendChild(makeAddTodoButton());
+
+    return todoListContainer;
 }
 
-// function to make HTML project tab from project
-function makeHtmlProjectTab(project) {
-    const projectTabDiv = document.createElement("div");
-    projectTabDiv.setAttribute("class", "project-tab");
+// from a Todo object returns a todo div with all its content and buttons
+function makeTodo(todo, todoList) {
+    const todoTile = document.createElement("div");
+    todoTile.setAttribute("class", "todo-tile");
+
+    const btnContainer = document.createElement("div");
+    btnContainer.setAttribute("class", "btn-container");
+    todoTile.appendChild(btnContainer);
+
+    const todoInfo = document.createElement("div");
+    todoInfo.setAttribute("class", "todo-info");
+    todoTile.appendChild(todoInfo);
+
+    const delBtn = document.createElement("button");
+    delBtn.setAttribute("type", "button");
+    delBtn.innerText = "";
+    btnContainer.appendChild(delBtn);
+    delBtn.addEventListener("click", (e) => {
+        todoList.remove(todo);
+    });
+
+    const editBtn = document.createElement("button");
+    editBtn.setAttribute("type", "button");
+    editBtn.innerText = "";
+    btnContainer.appendChild(editBtn);
+    editBtn.addEventListener("click", null) // todo
+
+    const todoName = document.createElement("p");
+    todoName.innerText = todo.name;
+    todoName.setAttribute("class", "todo-name");
+    todoInfo.appendChild(todoName);
+
+    const todoDesc = document.createElement("p");
+    todoDesc.innerText = todo.desc;
+    todoDesc.setAttribute("class", "todo-desc");
+    todoInfo.appendChild(todoDesc);
+
+    const todoDate = document.createElement("p");
+    todoDate.inner = dateToStr(todo.dueDate);
+    todoDate.setAttribute("class", "todo-date");
+    todoInfo.appendChild(todoDate);
     
-    const delProjBtn = document.createElement("button");
-    delProjBtn.setAttribute("class", "project-delete-btn");
-    delProjBtn.setAttribute("type", "button");
-    delProjBtn.innerText = "";
-    projectTabDiv.appendChild(delProjBtn);
+    const todoPriority = document.createElement("p");
+    todoPriority.innerText = todo.priority;
+    todoPriority.setAttribute("class", "todo-priority");
+    todoInfo.appendChild(todoPriority)
     
-    const projNameP = document.createElement("h1");
-    projNameP.setAttribute("class", "project-name");
-    projNameP.innerText = project.name;
-    projectTabDiv.appendChild(projNameP);
-    
-    const projDateP = document.createElement("p");
-    projDateP.innerText = dateToStr(project.dueDate);
-    projDateP.setAttribute("class", "project-date");
-    projectTabDiv.appendChild(projDateP);
-    
-    return projectTabDiv;
+    const reqsDiv = document.createElement("div");
+    reqsDiv.setAttribute("class", "requirements");
+    for(let i = 0; i < todo.reqs.length;i++) {
+        const reqCheck = document.createElement("input");
+        reqCheck.setAttribute("type", "checkbox");
+        reqCheck.setAttribute("name", `req-${i}`);
+        reqCheck.setAttribute("class", "req");
+
+        const reqLabel = document.createElement("label");
+        reqLabel.setAttribute("for", `req-${i}`);
+        reqLabel.setAttribute("class", "req-label");
+        reqLabel.innerText = todo.reqs[i];
+
+        reqsDiv.appendChild(reqCheck);
+        reqsDiv.appendChild(reqLabel);
+    };
+    todoInfo.appendChild(reqsDiv);
+
+
+    return todoTile;
 }
 
 
-// load page content from local storage
-// user modifies the local storage
-// the javascript reloads the page content on each delete/edit/done action
-function loadProjectTabs() {
-    const projectsContainer = document.querySelector("#projects-container");
-    const projects = readProjects("localStorage");
-    for(let i = 0; i < projects.length;i++) {
-        const project = projects[i];
-        const projectTab = makeHtmlProjectTab(project);
-        projectTab.addEventListener("click", (e) => {
-            fillTodoContainer(makeHtmlTodoList(project.todoList));
-        })
-        projectsContainer.appendChild(projectTab);
-
-    }
-}
-loadProjectTabs();
-// function to empty the todo-container
-function emptyTodoContainer() {
-    document.querySelector("#todo-container").innerHTML = "";
+// returns the button dom element that allows to add a todo item
+function makeAddTodoButton() {
+    const addBtn = document.createElement("button");
+    addBtn.innerText = "+";
+    addBtn.setAttribute("id", "add-todo-btn");
+    return addBtn;
 }
 
-// function to update the todo-container with clicked tab
-function fillTodoContainer(div) {
-    emptyTodoContainer();
-    document.querySelector("#todo-container").appendChild(div);
-}
-
-
-// const projectTable = [
-//     [tab1,project1],
-//     [tab2, project2], 
-// ]
-
-
-
-
-
-// event handler to delete a todo
-function handleDeleteTodo(event) {
+// returns the button dom element that allows to add a project
+function makeAddProjectButton() {
+    const addBtn = document.createElement("button");
+    addBtn.innerText = "+";
+    addBtn.setAttribute("id", "add-project-btn");
+    return addBtn;
 
 }
+// delete project
 
-function handleDoneTodo(event) {
-
-}
-
-function dateToStr(dueDate) {
-    return `${dueDate.toDateString()} at ${dueDate.toTimeString().split(" ")[0]}`;
-}
+// make todo list from selected project
